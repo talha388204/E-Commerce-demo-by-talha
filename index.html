@@ -1,73 +1,977 @@
 <!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>E-commerce by talha — Glassy Market (Fast Streamed)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#071018; --card: rgba(255,255,255,0.03); --glass: rgba(255,255,255,0.025);
+      --accent:#ff3cac; --muted:#9aa5b1; --success:#3fe3a1; --danger:#ff5c7c;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      font-family:Inter, Poppins, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
+      background:
+        radial-gradient(1000px 400px at 10% 10%, rgba(255,60,140,0.06), transparent),
+        linear-gradient(180deg,#071018 0%, #0f1115 100%);
+      color:#e6eef8; margin:0; -webkit-font-smoothing:antialiased
+    }
+    a{color:inherit}
+    .app{max-width:1200px;margin:0 auto;padding:12px}
+    .topbar{display:flex;justify-content:space-between;align-items:center;padding:8px 4px;gap:12px}
+    .brand{font-weight:700;font-size:20px}
+    .brand .accent{color:var(--accent);margin-left:6px}
+    .nav-right{display:flex;align-items:center;gap:8px}
+    .nav-link{background:transparent;border:0;color:inherit;font-size:15px;padding:8px 10px;border-radius:8px;cursor:pointer}
+    .nav-link:hover{background:rgba(255,255,255,0.02)}
+    .badge{background:var(--accent);color:#fff;padding:2px 8px;border-radius:12px;font-size:12px;margin-left:6px}
+    .glass{background:var(--glass);border:1px solid rgba(255,255,255,0.04);padding:10px;border-radius:14px;backdrop-filter:blur(6px)}
+    .search{display:flex;gap:8px;margin:12px 0;flex-wrap:wrap}
+    .search input{flex:1;min-width:220px;padding:12px;border-radius:12px;border:0;background:rgba(255,255,255,0.02);color:inherit}
+    .hero{display:flex;gap:12px;align-items:center;padding:12px;border-radius:14px;overflow:hidden}
+    .hero .left{flex:1}
+    .hero h1{margin:0;font-size:18px}
+    .hero p{color:var(--muted);margin:6px 0}
+    .countdown{display:inline-block;padding:8px;border-radius:10px;background:linear-gradient(90deg, rgba(255,60,120,0.08), rgba(255,60,120,0.03));font-weight:600}
+    .categories{display:flex;gap:8px;overflow:auto;padding:12px 0}
+    .cat{flex:0 0 auto;padding:10px 14px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));cursor:pointer;white-space:nowrap}
+    .cat.active{border:1px solid rgba(255,255,255,0.06);box-shadow:0 8px 30px rgba(0,0,0,0.6)}
+    .product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding-bottom:120px}
+    .card{border-radius:12px;padding:10px;background:var(--card);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:0 6px 18px rgba(2,6,23,0.6);
+      content-visibility:auto; contain-intrinsic-size: 160px 120px;
+    }
+    .product{display:flex;gap:10px;align-items:center}
+    .prod-img{width:88px;height:88px;object-fit:cover;border-radius:10px}
+    .prod-name{margin:0;font-size:14px;line-height:1.3}
+    .price-row{display:flex;gap:8px;align-items:center}
+    .old{color:var(--muted);text-decoration:line-through;font-size:13px}
+    .price{font-weight:700;color:#fff}
+    .btn{background:transparent;border:0;padding:8px 12px;border-radius:10px;color:var(--accent);cursor:pointer}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),#ff5cb6);color:#fff}
+    .btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.04)}
+    .floating{position:fixed;right:18px;bottom:18px;z-index:50;display:flex;gap:8px}
+    .loadmore{position:relative;margin:18px auto 0;display:flex;justify-content:center}
+    .muted{color:var(--muted)}
+    .tag-sale{background:linear-gradient(90deg,var(--accent),#ff5cb6);padding:4px 8px;border-radius:8px;color:#fff;font-weight:700;font-size:12px}
+    .center{text-align:center}
+    .link{color:var(--accent);cursor:pointer}
+    .hidden{display:none!important}
+    .route{display:none}
+    .route.active{display:block}
+    @media(min-width:860px){
+      .product-grid{grid-template-columns:repeat(3,1fr)}
+      .hero .hero-img{width:260px;height:150px}
+    }
 
+    /* Admin table */
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.06)}
+    th{text-align:left;color:#cbd5e1;font-weight:600}
+    tr:hover{background:rgba(255,255,255,0.02)}
+    input,select,textarea{background:rgba(255,255,255,0.02);color:#e6eef8;border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:10px}
+    label{font-size:12px;color:#9aa5b1}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    .pill{display:inline-block;padding:2px 8px;border-radius:999px;background:rgba(255,255,255,0.06);font-size:12px}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:12px">
+        <a class="brand" href="#/">E-commerce by <span class="accent">talha</span></a>
+        <div class="muted small">Firebase/Auth + Firestore Admin</div>
+      </div>
+      <nav class="nav-right">
+        <a class="nav-link" href="#/orders" id="navOrders">অর্ডার</a>
+        <a class="nav-link" href="#/admin" id="navAdmin">অ্যাডমিন</a>
+        <a class="nav-link" href="#/login" id="navLogin">লগইন</a>
+        <a class="nav-link" href="#/cart" id="navCart">🛒 কার্ট <span id="cartCount" class="badge">0</span></a>
+      </nav>
+    </header>
 
-<section class="categories">
-<div class="cat glass" data-cat="all">সবকিছু</div>
-<div class="cat glass" data-cat="grocery">গ্রোসারি</div>
-<div class="cat glass" data-cat="beauty">বিউটি</div>
-<div class="cat glass" data-cat="health">হেলথ</div>
-<div class="cat glass" data-cat="food">ফুড</div>
-</section>
+    <!-- Home route -->
+    <section id="route-home" class="route active">
+      <section class="search glass" aria-label="search">
+        <input id="search" placeholder="প্রোডাক্ট খুঁজুন — উদাহরণ: bag, shirt, phone" />
+        <select id="source" class="glass" style="min-width:140px">
+          <option value="all">All sources</option>
+          <option value="fakestore">FakeStore only</option>
+          <option value="dummyjson">DummyJSON only</option>
+          <option value="firestore">Firestore only</option>
+        </select>
+        <button id="clearSearch" class="btn ghost">রিসেট</button>
+      </section>
 
+      <section class="hero glass" style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+        <div class="left">
+          <h1>Flash Sale — আজকের বিশেষ ছাড়!</h1>
+          <p class="muted">সীমিত সময়ের জন্য — স্টক শেষ হলে অফার উঠে যাবে।</p>
+          <div style="margin-top:8px" class="countdown">
+            অবশিষ্ট:
+            <span id="hrs">00</span>h :
+            <span id="mins">00</span>m :
+            <span id="secs">00</span>s
+          </div>
+        </div>
+        <div class="hero-img" style="width:140px;height:90px;border-radius:10px;overflow:hidden">
+          <img src="https://images.unsplash.com/photo-1585386959984-a41552286b55?q=80&w=800&auto=format&fit=crop" alt="" style="width:100%;height:100%;object-fit:cover" loading="lazy">
+        </div>
+      </section>
 
-<section id="productGrid" class="product-grid">
-<!-- প্রোডাক্ট কার্ডগুলো JS দিয়ে ভরা হবে -->
-</section>
-</main>
+      <section class="categories" id="categories"></section>
+      <section style="margin-top:12px" class="product-grid" id="grid"></section>
 
+      <div class="loadmore">
+        <button id="loadMoreBtn" class="btn ghost">আরও দেখুন</button>
+      </div>
+      <div id="ioSentinel" style="height:1px"></div>
+    </section>
 
-<!-- CART MODAL -->
-<div id="cartModal" class="modal">
-<div class="modal-content glass">
-<header class="modal-header">
-<h3>আপনার কার্ট</h3>
-<button id="closeCart" class="icon-btn">✕</button>
-</header>
-<div id="cartItems" class="cart-items"></div>
-<div class="cart-footer">
-<div class="total">Total: ৳ <span id="cartTotal">0</span></div>
-<button id="checkoutBtn" class="btn primary">চেকআউট</button>
-</div>
-</div>
-</div>
+    <!-- Cart page -->
+    <section id="route-cart" class="route">
+      <div class="glass" style="padding:16px">
+        <h2>আপনার কার্ট</h2>
+        <div id="cartPageItems" style="margin-top:12px"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+          <div class="small muted">মোট: ৳ <span id="cartPageTotal">0</span></div>
+          <div>
+            <a href="#/checkout" class="btn primary">চেকআউট</a>
+            <a href="#/" class="btn ghost">শপিং চালিয়ে যান</a>
+          </div>
+        </div>
+      </div>
+    </section>
 
+    <!-- Checkout page -->
+    <section id="route-checkout" class="route">
+      <div class="glass" style="padding:16px">
+        <h2>চেকআউট</h2>
+        <form id="checkoutPageForm" style="margin-top:12px">
+          <div class="grid-3">
+            <input name="name" placeholder="আপনার নাম" required>
+            <input name="phone" placeholder="মোবাইল নম্বর" required>
+            <input name="address" placeholder="ডেলিভারি ঠিকানা" required>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+            <div class="small muted">পেমেন্ট: Cash on delivery (ডেমো)</div>
+            <button type="submit" class="btn primary">অর্ডার কনফার্ম</button>
+          </div>
+        </form>
+      </div>
+    </section>
 
-<!-- CHECKOUT MODAL -->
-<div id="checkoutModal" class="modal">
-<div class="modal-content glass">
-<header class="modal-header">
-<h3>চেকআউট</h3>
-<button id="closeCheckout" class="icon-btn">✕</button>
-</header>
-<form id="checkoutForm" class="checkout-form">
-<label>নাম<input name="name" required></label>
-<label>ফোন<input name="phone" required></label>
-<label>ঠিকানা<textarea name="address" rows="3" required></textarea></label>
-<div class="form-actions">
-<button type="submit" class="btn primary">অর্ডার কনফার্ম (COD)</button>
-</div>
-</form>
-</div>
-</div>
+    <!-- Login / Profile page -->
+    <section id="route-login" class="route">
+      <div class="glass" style="padding:16px;max-width:560px;margin:12px auto">
+        <h2 id="loginTitle">লগইন</h2>
+        <form id="loginPageForm" style="margin-top:12px">
+          <div id="loginFields"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+            <div><a id="toggleLoginView" class="link">রেজিস্টার করুন</a></div>
+            <button type="submit" class="btn primary" id="loginPageSubmit">লগইন</button>
+          </div>
+        </form>
+      </div>
+    </section>
 
+    <!-- Orders page -->
+    <section id="route-orders" class="route">
+      <div class="glass" style="padding:16px">
+        <h2>অর্ডারসমূহ</h2>
+        <div id="ordersPageList" style="margin-top:12px"></div>
+      </div>
+    </section>
 
-<template id="productCardTpl">
-<div class="card product-card glass">
-<img class="prod-img" src="" alt="">
-<div class="prod-info">
-<h4 class="prod-name"></h4>
-<div class="price-row">
-<div class="price">৳ <span class="current"></span></div>
-<div class="old-price">৳ <span class="old"></span></div>
-</div>
-<div class="card-actions">
-<button class="btn addCart">Add</button>
-</div>
-</div>
-</div>
-</template>
+    <!-- Admin page -->
+    <section id="route-admin" class="route">
+      <div class="glass" style="padding:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h2 style="margin:0">অ্যাডমিন প্যানেল</h2>
+          <div>
+            <span id="adminRoleBadge" class="pill">role: -</span>
+            <button id="addProductBtn" class="btn primary">নতুন প্রোডাক্ট যোগ করুন</button>
+          </div>
+        </div>
+        <p class="muted" style="margin-top:4px">শুধু admin role ইউজাররা add/edit/delete করতে পারবে।</p>
+        <div id="adminProducts" style="margin-top:12px" class="glass">
+          <div style="padding:12px">লোড হচ্ছে...</div>
+        </div>
+      </div>
+    </section>
 
+    <template id="productTpl">
+      <div class="card product">
+        <img class="prod-img" src="" alt="" loading="lazy">
+        <div style="flex:1">
+          <div style="display:flex;justify-content:space-between;align-items:start">
+            <div>
+              <h3 class="prod-name" style="margin:0 0 6px 0"></h3>
+              <div class="small muted prod-cat"></div>
+            </div>
+            <div class="tag-sale small" style="display:none">-</div>
+          </div>
+          <div class="price-row" style="margin-top:8px">
+            <div class="price">৳ <span class="priceVal">0</span></div>
+            <div class="old">৳ <span class="oldVal">0</span></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn add">Add</button>
+          <button class="btn ghost view">View</button>
+        </div>
+      </div>
+    </template>
+  </div>
 
-<script src="app.js"></script>
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+    import {
+      getFirestore, collection, doc, getDoc, setDoc, addDoc, getDocs, query, orderBy,
+      serverTimestamp, updateDoc, deleteDoc, limit as qLimit, startAfter as qStartAfter
+    } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+    import { getStorage, ref as sRef, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBnVNIMeJxm_fXcpfBGg-BbdIe5WL8drXg",
+      authDomain: "new-app-9fbd8.firebaseapp.com",
+      projectId: "new-app-9fbd8",
+      storageBucket: "new-app-9fbd8.firebasestorage.app",
+      messagingSenderId: "784160013930",
+      appId: "1:784160013930:web:2a44217c7e4c435a951413"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    const KEY = { PRODUCTS:'gm_products_cache_v4', CART:'gm_cart_v3' };
+    const q$ = sel => document.querySelector(sel);
+    const qa$ = sel => Array.from(document.querySelectorAll(sel));
+
+    const USD_TO_BDT = 120;
+    const toBDT = n => Math.round(Number(n||0) * USD_TO_BDT);
+    const escapeHtml = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+
+    // ---------- Streamed Source Loaders (FAST) ----------
+    // Each loader exposes: nextChunk() -> returns array[], hasMore boolean
+    function makeFakestoreLoader(chunk=24){
+      let cache = null, idx = 0;
+      let inFlight = false;
+      return {
+        name:'fakestore',
+        async nextChunk(){
+          if(!cache && !inFlight){
+            inFlight = true;
+            try{
+              const res = await fetch('https://fakestoreapi.com/products');
+              const data = await res.json();
+              cache = data.map(p=>({
+                id:`fs-${p.id}`, source:'fakestore', name:p.title, slug:slugify(p.title),
+                price:toBDT(p.price), original:Math.round(toBDT(p.price)*1.2), category:p.category,
+                image:p.image, rating:p.rating?.rate||0, stock:p.rating?.count||10,
+                flash:Math.random()<0.35, description:p.description
+              }));
+            } finally { inFlight = false; }
+          }
+          if(!cache) return [];
+          const slice = cache.slice(idx, idx+chunk);
+          idx += slice.length;
+          return slice;
+        },
+        get hasMore(){ return cache ? idx < cache.length : true; }
+      };
+    }
+
+    function makeDummyLoader(pageSize=24){
+      let skip = 0, total = Infinity;
+      let exhausted = false;
+      return {
+        name:'dummyjson',
+        async nextChunk(){
+          if(exhausted) return [];
+          const url = `https://dummyjson.com/products?limit=${pageSize}&skip=${skip}`;
+          const res = await fetch(url);
+          if(!res.ok){ exhausted = true; return []; }
+          const data = await res.json();
+          total = data.total ?? total;
+          skip += data.products.length;
+          if(data.products.length===0){ exhausted = true; return []; }
+          return data.products.map(p=>({
+            id:`dj-${p.id}`, source:'dummyjson', name:p.title, slug:slugify(p.title),
+            price:toBDT(p.price), original:Math.round(toBDT(p.price)*1.15), category:p.category,
+            image:(p.thumbnail||p.images?.[0]||''), rating:p.rating||0, stock:p.stock||10,
+            flash:Math.random()<0.3, description:p.description
+          }));
+        },
+        get hasMore(){ return !exhausted && skip < total; }
+      };
+    }
+
+    function makeFirestoreLoader(batch=24){
+      let cursor = null;
+      let exhausted = false;
+      return {
+        name:'firestore',
+        async nextChunk(){
+          if(exhausted) return [];
+          let qref = query(collection(db,'products'), orderBy('name'), qLimit(batch));
+          if(cursor) qref = query(collection(db,'products'), orderBy('name'), qStartAfter(cursor), qLimit(batch));
+          const snap = await getDocs(qref);
+          if(snap.empty){ exhausted = true; return []; }
+          const list=[];
+          snap.forEach(d=>{
+            const p = d.data();
+            list.push({
+              id:d.id, source:'firestore', name:p.name, slug:slugify(p.name),
+              price:Number(p.price)||0, original:Number(p.original)||0, category:p.category||'misc',
+              image:p.image||'', rating:Number(p.rating)||0, stock:Number(p.stock)||0,
+              flash:!!p.flash, description:p.description||''
+            });
+          });
+          cursor = snap.docs[snap.docs.length-1];
+          if(list.length < batch) exhausted = true;
+          return list;
+        },
+        get hasMore(){ return !exhausted; }
+      };
+    }
+
+    // Merge/stream state
+    const loaders = [ makeDummyLoader(24), makeFakestoreLoader(24), makeFirestoreLoader(24) ];
+    let master = [];         // full dataset (grows)
+    let filtered = [];       // filtered view
+    let page = 0;
+    const RENDER_CHUNK = 30; // UI chunk per append
+
+    // UI refs
+    const grid = q$('#grid');
+    const tpl = q$('#productTpl').content;
+    const catWrap = q$('#categories');
+    const search = q$('#search');
+    const srcSel = q$('#source');
+    const loadMoreBtn = q$('#loadMoreBtn');
+    const ioSentinel = q$('#ioSentinel');
+
+    // cache (short TTL)
+    function cacheSet(k, v, ttlMs=2*60*1000){ // 2 min
+      const obj = { v, exp: Date.now()+ttlMs };
+      localStorage.setItem(k, JSON.stringify(obj));
+    }
+    function cacheGet(k){
+      try{
+        const obj = JSON.parse(localStorage.getItem(k)||'null');
+        if(!obj) return null;
+        if(Date.now()>obj.exp) return null;
+        return obj.v;
+      }catch{ return null; }
+    }
+
+    // Utilities
+    function slugify(s){ return String(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)+/g,''); }
+
+    // ---------- Rendering ----------
+    function renderCategories(list){
+      const cats = ['all', ...Array.from(new Set(list.map(p=>p.category)))];
+      catWrap.innerHTML = cats.map((c,i)=>`<div class="cat ${i===0?'active':''}" data-cat="${escapeHtml(c)}">${escapeHtml(c)}</div>`).join('');
+      qa$('.cat').forEach(c=>c.addEventListener('click', ()=>{
+        qa$('.cat').forEach(x=>x.classList.remove('active'));
+        c.classList.add('active');
+        applyFilter(true);
+      }));
+    }
+
+    function createCard(p){
+      const node = tpl.cloneNode(true);
+      const img = node.querySelector('.prod-img');
+      img.src = p.image || 'https://images.unsplash.com/photo-1545235617-9465d0f6f3a6?q=80&w=800&auto=format&fit=crop';
+      img.alt = p.name;
+      node.querySelector('.prod-name').textContent = p.name;
+      node.querySelector('.prod-cat').textContent = `${p.category} · ${p.source}`;
+      node.querySelector('.priceVal').textContent = p.price;
+      node.querySelector('.oldVal').textContent = p.original || Math.round(p.price*1.1);
+      if(p.flash){
+        const tag = node.querySelector('.tag-sale');
+        tag.style.display='inline-block';
+        tag.textContent = 'FLASH';
+      }
+      node.querySelector('.add').addEventListener('click', ()=> addToCart(p));
+      node.querySelector('.view').addEventListener('click', ()=> alert(`${p.name}\n\n${p.description||'No description'}`));
+      return node;
+    }
+
+    function appendProducts(list){
+      if(!list.length) return;
+      const frag = document.createDocumentFragment();
+      for(const p of list){ frag.appendChild(createCard(p)); }
+      grid.appendChild(frag);
+    }
+
+    function updateLoadMoreVisibility(){
+      const hasMoreLocal = page * RENDER_CHUNK < filtered.length;
+      const anyLoaderHasMore = loaders.some(l=>l.hasMore);
+      loadMoreBtn.style.display = (hasMoreLocal || anyLoaderHasMore) ? 'inline-block' : 'none';
+    }
+
+    function renderChunk(){
+      const start = page * RENDER_CHUNK;
+      const slice = filtered.slice(start, start+RENDER_CHUNK);
+      appendProducts(slice);
+      page++;
+      updateLoadMoreVisibility();
+    }
+
+    // ---------- Filtering / Search (debounced) ----------
+    let debounceTimer = null;
+    function applyFilter(reset=false){
+      if(reset){ page=0; grid.innerHTML=''; }
+      const qv = search.value.trim().toLowerCase();
+      const activeCat = qa$('.cat').find(x=>x.classList.contains('active'))?.dataset.cat || 'all';
+      const source = srcSel.value;
+
+      filtered = master.filter(p=>{
+        const matchCat = activeCat==='all' || String(p.category).toLowerCase()===String(activeCat).toLowerCase();
+        const matchSrc = source==='all' || p.source===source;
+        const matchText = !qv || p.name.toLowerCase().includes(qv) || String(p.category).toLowerCase().includes(qv);
+        return matchCat && matchSrc && matchText;
+      });
+
+      if(filtered.length===0){
+        grid.innerHTML = '<div class="center muted">কোন প্রোডাক্ট পাওয়া যায়নি</div>';
+        loadMoreBtn.style.display='none';
+        return;
+      }
+      renderChunk();
+    }
+
+    function scheduleFilter(){
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(()=> applyFilter(true), 180);
+    }
+
+    // ---------- Stream Orchestrator ----------
+    let streaming = false;
+    async function streamNextRound(){
+      if(streaming) return;
+      streaming = true;
+      try{
+        // round-robin across loaders
+        const results = await Promise.allSettled(loaders.map(l=> l.hasMore ? l.nextChunk() : Promise.resolve([])));
+        const merged = results.flatMap(r => (r.status==='fulfilled' ? r.value : [])).filter(Boolean);
+
+        if(merged.length){
+          // cache (append) — short TTL
+          const cached = cacheGet(KEY.PRODUCTS) || [];
+          cacheSet(KEY.PRODUCTS, cached.concat(merged));
+
+          // push into master, keep FLASH first then others by arrival
+          const newly = merged.sort((a,b)=> (b.flash?1:0)-(a.flash?1:0));
+          master = master.concat(newly);
+
+          // initial setup of categories (only once or when first data arrives)
+          if(catWrap.childElementCount===0){ renderCategories(master); }
+
+          // if current filter would include some of these, append them without full rerender
+          const qv = search.value.trim().toLowerCase();
+          const activeCat = qa$('.cat').find(x=>x.classList.contains('active'))?.dataset.cat || 'all';
+          const source = srcSel.value;
+
+          const newlyFiltered = newly.filter(p=>{
+            const matchCat = activeCat==='all' || String(p.category).toLowerCase()===String(activeCat).toLowerCase();
+            const matchSrc = source==='all' || p.source===source;
+            const matchText = !qv || p.name.toLowerCase().includes(qv) || String(p.category).toLowerCase().includes(qv);
+            return matchCat && matchSrc && matchText;
+          });
+
+          // If we haven't rendered anything yet, do normal filter render
+          if(page===0 && filtered.length===0){
+            filtered = master.filter(p=>{
+              const matchCat = activeCat==='all' || String(p.category).toLowerCase()===String(activeCat).toLowerCase();
+              const matchSrc = source==='all' || p.source===source;
+              const matchText = !qv || p.name.toLowerCase().includes(qv) || String(p.category).toLowerCase().includes(qv);
+              return matchCat && matchSrc && matchText;
+            });
+            renderChunk();
+          } else if(newlyFiltered.length){
+            // append only the new matching ones AND also push to filtered list
+            filtered = filtered.concat(newlyFiltered);
+            // render only what fits next chunk boundary: render small batches for smoothness
+            const toRender = newlyFiltered.slice(0, Math.max(10, Math.min(30, newlyFiltered.length)));
+            appendProducts(toRender);
+          }
+          updateLoadMoreVisibility();
+        }
+      } finally {
+        streaming = false;
+      }
+    }
+
+    // IntersectionObserver for infinite scroll
+    const io = new IntersectionObserver((entries)=>{
+      for(const e of entries){
+        if(e.isIntersecting){
+          // If rendered all locally available items, fetch more from sources
+          const hasMoreLocal = page * RENDER_CHUNK < filtered.length;
+          if(hasMoreLocal){
+            renderChunk();
+          } else {
+            streamNextRound();
+          }
+        }
+      }
+    }, { rootMargin: '600px 0px 600px 0px' });
+    io.observe(ioSentinel);
+
+    // --- Controls / Listeners ---
+    search.addEventListener('input', scheduleFilter, { passive:true });
+    srcSel.addEventListener('change', ()=> applyFilter(true));
+    q$('#clearSearch').addEventListener('click', ()=>{
+      search.value=''; srcSel.value='all';
+      qa$('.cat').forEach((el,i)=> el.classList.toggle('active', i===0));
+      applyFilter(true);
+    });
+    loadMoreBtn.addEventListener('click', ()=>{
+      const hasMoreLocal = page * RENDER_CHUNK < filtered.length;
+      if(hasMoreLocal) renderChunk(); else streamNextRound();
+    });
+
+    window.addEventListener('scroll', ()=>{}, { passive:true });
+
+    function loadingState(on){
+      if(on){
+        grid.innerHTML = '<div class="center muted">লোড হচ্ছে...</div>';
+        loadMoreBtn.style.display='none';
+      }
+    }
+
+    async function bootHome(){
+      loadingState(true);
+
+      // warm from cache (instant paint)
+      const cached = cacheGet(KEY.PRODUCTS);
+      if(cached && cached.length){
+        master = cached;
+        renderCategories(master);
+        applyFilter(true);
+      } else {
+        // kick first round to show something ASAP
+        await streamNextRound();
+        if(master.length===0){
+          grid.innerHTML = `<div class="center"><div class="card" style="padding:16px">API/Firestore থেকে ডাটা আনা যায়নি।<br><button id="retryBtn" class="btn" style="margin-top:8px">পুনরায় চেষ্টা</button></div></div>`;
+          q$('#retryBtn')?.addEventListener('click', bootHome);
+          return;
+        }
+      }
+
+      // keep streaming lazily
+      // do a couple of prefetch rounds in idle time
+      if('requestIdleCallback' in window){
+        requestIdleCallback(()=> streamNextRound());
+        requestIdleCallback(()=> streamNextRound());
+      } else {
+        setTimeout(()=> streamNextRound(), 0);
+        setTimeout(()=> streamNextRound(), 200);
+      }
+    }
+
+    // ---------- Cart page renderer ----------
+    function getCart(){ return JSON.parse(localStorage.getItem(KEY.CART)||'{}'); }
+    function saveCart(cart){
+      localStorage.setItem(KEY.CART, JSON.stringify(cart));
+      renderCartPage();
+      updateNavCart();
+      syncCartToFirestore();
+    }
+
+    function renderCartPage(){
+      const container = q$('#cartPageItems');
+      if(!container) return;
+      const cart = getCart();
+      const items = Object.values(cart);
+      container.innerHTML='';
+      if(items.length===0){
+        container.innerHTML='<div class="center muted">কার্ট ফাঁকা</div>';
+        q$('#cartPageTotal').textContent='0';
+        updateNavCart();
+        return;
+      }
+      let total=0;
+      for(const it of items){
+        total += it.price * it.qty;
+        const row = document.createElement('div');
+        row.className='card';
+        row.style.marginBottom='8px';
+        row.innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div><strong>${escapeHtml(it.name)}</strong>
+            <div class="small muted">৳ ${it.price} × ${it.qty}</div></div>
+            <div>
+              <button class="btn inc" data-id="${it.id}">＋</button>
+              <button class="btn dec" data-id="${it.id}">－</button>
+              <button class="btn rm" style="color:var(--danger)" data-id="${it.id}">✕</button>
+            </div>
+          </div>`;
+        container.appendChild(row);
+      }
+      q$('#cartPageTotal').textContent = total;
+
+      container.querySelectorAll('.inc').forEach(b=>b.addEventListener('click', e=>{
+        const id=e.target.dataset.id; const cart=getCart(); cart[id].qty++; saveCart(cart);
+      }));
+      container.querySelectorAll('.dec').forEach(b=>b.addEventListener('click', e=>{
+        const id=e.target.dataset.id; const cart=getCart(); if(cart[id].qty>1) cart[id].qty--; else delete cart[id]; saveCart(cart);
+      }));
+      container.querySelectorAll('.rm').forEach(b=>b.addEventListener('click', e=>{
+        const id=e.target.dataset.id; const cart=getCart(); delete cart[id]; saveCart(cart);
+      }));
+      updateNavCart();
+    }
+
+    function updateNavCart(){
+      const cart = getCart();
+      const count = Object.values(cart).reduce((s,i)=>s+i.qty,0);
+      q$('#cartCount').textContent = count;
+    }
+
+    function addToCart(product){
+      const cart = getCart();
+      const id = product.id;
+      if(cart[id]) cart[id].qty += 1;
+      else cart[id] = { id, name:product.name, price:product.price, qty:1 };
+      saveCart(cart);
+      alert('প্রোডাক্ট কার্টে যোগ হয়েছে');
+    }
+
+    // ---------- Checkout ----------
+    q$('#checkoutPageForm').addEventListener('submit', async e=>{
+      e.preventDefault();
+      const user = auth.currentUser;
+      const fd = new FormData(e.target);
+      const name = fd.get('name'), phone = fd.get('phone'), address = fd.get('address');
+      const cart = getCart();
+      const items = Object.values(cart);
+      if(items.length===0) return alert('কার্ট ফাঁকা');
+      const total = items.reduce((s,i)=>s + i.price * i.qty, 0);
+      try{
+        await addDoc(collection(db, 'orders'), {
+          userId: user ? user.uid : null, name, phone, address, items, total,
+          status:'pending', createdAt: serverTimestamp()
+        });
+        localStorage.setItem(KEY.CART, JSON.stringify({}));
+        renderCartPage(); updateNavCart();
+        location.hash = '#/orders';
+        alert('অর্ডার কনফার্ম হয়েছে (ডেমো)');
+      }catch(err){
+        console.error(err); alert('অর্ডার সেভ করতে সমস্যা!');
+      }
+    });
+
+    async function syncCartToFirestore(){
+      const user = auth.currentUser;
+      if(!user) return;
+      try{
+        await setDoc(doc(db,'carts',user.uid), { items: getCart(), updatedAt: serverTimestamp() });
+      }catch(e){ console.warn('Cart sync failed',e); }
+    }
+
+    // ---------- Auth UI ----------
+    function showLoginForm(mode='login'){
+      const fields = q$('#loginFields');
+      fields.innerHTML='';
+      if(mode==='login'){
+        q$('#loginTitle').textContent='লগইন';
+        fields.innerHTML = `
+          <input name="email" placeholder="ইমেইল" required>
+          <input name="password" placeholder="পাসওয়ার্ড" required type="password">`;
+        q$('#loginPageSubmit').textContent='লগইন';
+        q$('#toggleLoginView').textContent='রেজিস্টার করুন';
+      } else {
+        q$('#loginTitle').textContent='রেজিস্টার';
+        fields.innerHTML = `
+          <input name="name" placeholder="নাম" required>
+          <input name="email" placeholder="ইমেইল" required>
+          <input name="password" placeholder="পাসওয়ার্ড" required type="password">`;
+        q$('#loginPageSubmit').textContent='রেজিস্টার';
+        q$('#toggleLoginView').textContent='একাউন্ট আছে? লগইন';
+      }
+
+      q$('#toggleLoginView').onclick = ()=> showLoginForm(mode==='login'?'register':'login');
+
+      q$('#loginPageForm').onsubmit = async (e)=>{
+        e.preventDefault();
+        const fd = new FormData(e.target);
+        if(mode==='login'){
+          const email = fd.get('email'), pass = fd.get('password');
+          try{
+            await signInWithEmailAndPassword(auth, email, pass);
+            location.hash = '#/';
+          }catch(err){ alert(err.message); }
+        } else {
+          const name = fd.get('name'), email = fd.get('email'), pass = fd.get('password');
+          try{
+            const cred = await createUserWithEmailAndPassword(auth, email, pass);
+            await updateProfile(cred.user, { displayName: name });
+            await setDoc(doc(db, 'users', cred.user.uid), {
+              name, email, role:'customer', createdAt: serverTimestamp()
+            });
+            location.hash = '#/'; alert('রেজিস্টার সফল');
+          }catch(err){ alert(err.message); }
+        }
+      };
+    }
+
+    async function getUserRole(uid){
+      const ref = doc(db,'users',uid);
+      const snap = await getDoc(ref);
+      return snap.exists() ? (snap.data().role || 'customer') : 'customer';
+    }
+
+    onAuthStateChanged(auth, async (user)=>{
+      updateNavOnAuth(user);
+      await syncCartToFirestore();
+      if(location.hash==="#/admin") routeTo('#/admin');
+    });
+
+    function updateNavOnAuth(user){
+      q$('#navLogin').textContent = user ? (user.displayName || 'প্রোফাইল') : 'লগইন';
+    }
+
+    // ---------- Admin ----------
+    async function openAdmin(){
+      const container = q$('#adminProducts');
+      container.innerHTML = '<div style="padding:12px">লোড হচ্ছে...</div>';
+      const user = auth.currentUser;
+      if(!user){
+        container.innerHTML = '<div style="padding:12px" class="muted">লগইন করুন।</div>';
+        return;
+      }
+      const role = await getUserRole(user.uid);
+      q$('#adminRoleBadge').textContent = `role: ${role}`;
+      if(role !== 'admin'){
+        container.innerHTML = '<div style="padding:12px" class="muted">আপনি admin নন। কেবল view করতে পারবেন।</div>';
+      }
+      try{
+        // use loader directly to fetch first page (fast)
+        const fsLoader = makeFirestoreLoader(50);
+        const list = await fsLoader.nextChunk();
+
+        const rows = [
+          `<table><thead><tr><th>ছবি</th><th>নাম</th><th>ক্যাটাগরি</th><th>মূল্য</th><th>স্টক</th><th>অ্যাকশন</th></tr></thead><tbody>`,
+          ...list.map(p=>`
+            <tr>
+              <td><img src="${p.image}" style="width:64px;height:48px;object-fit:cover;border-radius:8px" loading="lazy"></td>
+              <td>${escapeHtml(p.name)}</td>
+              <td>${escapeHtml(p.category)}</td>
+              <td>৳ ${p.price}</td>
+              <td>${p.stock}</td>
+              <td>
+                <button class="btn ghost edit" data-id="${p.id}">Edit</button>
+                <button class="btn" style="color:var(--danger)" data-id="${p.id}" data-action="delete">Delete</button>
+              </td>
+            </tr>`).join(''),
+          `</tbody></table>`
+        ].join('');
+        container.innerHTML = rows || '<div style="padding:12px" class="muted">কোনো প্রোডাক্ট নেই</div>';
+
+        container.querySelectorAll('.edit').forEach(btn=>btn.addEventListener('click',()=>openProductEditor(btn.dataset.id)));
+        container.querySelectorAll('button[data-action="delete"]').forEach(btn=>btn.addEventListener('click', async ()=>{
+          if(role!=='admin') return alert('Admin নয়');
+          if(!confirm('প্রোডাক্টটি মুছে ফেলবেন?')) return;
+          try{
+            await deleteDoc(doc(db,'products', btn.dataset.id));
+            await refreshDataAfterAdminChange();
+          }catch(e){ alert('ডিলিট ব্যর্থ'); }
+        }));
+      }catch(e){
+        container.innerHTML = `<div style="padding:12px" class="muted">লোডিং ব্যর্থ: ${escapeHtml(e.message)}</div>`;
+      }
+    }
+
+    q$('#addProductBtn').addEventListener('click', ()=> openProductEditor());
+
+    async function openProductEditor(id=null){
+      const user = auth.currentUser;
+      if(!user) return alert('লগইন করুন');
+      const role = await getUserRole(user.uid);
+      if(role!=='admin') return alert('শুধু admin');
+
+      location.hash = '#/login';
+      const fields = q$('#loginFields');
+
+      let p = {name:'',price:0,original:0,category:'misc',image:'',stock:10,flash:false,description:'',rating:0};
+      if(id){
+        const snap = await getDoc(doc(db,'products',id));
+        if(snap.exists()) p = {...p, ...snap.data()};
+      }
+
+      fields.innerHTML = `
+        <div class="grid-2">
+          <div><label>নাম</label><input name="name" value="${escapeHtml(p.name)}" required></div>
+          <div><label>ক্যাটাগরি</label><input name="category" value="${escapeHtml(p.category)}" required></div>
+        </div>
+        <div class="grid-3" style="margin-top:8px">
+          <div><label>মূল্য</label><input name="price" value="${p.price}" required></div>
+          <div><label>পুরাতন মূল্য</label><input name="original" value="${p.original||''}"></div>
+          <div><label>স্টক</label><input name="stock" value="${p.stock||0}"></div>
+        </div>
+        <div style="margin-top:8px">
+          <label>বর্ণনা</label>
+          <textarea name="description" rows="3">${escapeHtml(p.description||'')}</textarea>
+        </div>
+        <div class="grid-2" style="margin-top:8px">
+          <div><label>ইমেজ URL</label><input name="image" value="${escapeHtml(p.image||'')}"></div>
+          <div><label>অথবা ফাইল আপলোড</label><input type="file" name="file"></div>
+        </div>
+        <label style="display:flex;gap:8px;align-items:center;margin-top:6px">
+          <input type="checkbox" name="flash" ${p.flash ? 'checked' : ''}> Flash Sale
+        </label>
+      `;
+
+      q$('#loginTitle').textContent = id ? 'প্রোডাক্ট আপডেট' : 'নতুন প্রোডাক্ট';
+      q$('#loginPageSubmit').textContent = id ? 'Update' : 'Create';
+      q$('#toggleLoginView').style.display='none';
+
+      q$('#loginPageForm').onsubmit = async (e)=>{
+        e.preventDefault();
+        const fd = new FormData(e.target);
+        let image = fd.get('image');
+        const file = fd.get('file');
+        const obj = {
+          name: fd.get('name'),
+          price: Number(fd.get('price')),
+          original: Number(fd.get('original'))||0,
+          stock: Number(fd.get('stock'))||0,
+          category: fd.get('category')||'misc',
+          description: fd.get('description')||'',
+          flash: !!fd.get('flash'),
+          image: ''
+        };
+        try{
+          if(file && file.size){
+            const docId = id || `${Date.now()}`;
+            const path = `products/${docId}/${file.name}`;
+            const ref = sRef(storage, path);
+            await uploadBytes(ref, file);
+            image = await getDownloadURL(ref);
+          }
+          obj.image = image || p.image || '';
+
+          if(id){ await updateDoc(doc(db,'products',id), obj); }
+          else { await addDoc(collection(db,'products'), obj); }
+
+          alert('প্রোডাক্ট সেভ হয়েছে');
+          q$('#toggleLoginView').style.display='inline';
+          await refreshDataAfterAdminChange();
+          location.hash = '#/admin';
+        }catch(err){
+          alert('সেভ ব্যর্থ: '+err.message);
+        }
+      };
+    }
+
+    async function refreshDataAfterAdminChange(){
+      if(location.hash==="#/admin") openAdmin();
+      // clear source caches to reflect changes
+      localStorage.removeItem(KEY.PRODUCTS);
+      master = [];
+      filtered = [];
+      page = 0;
+      grid.innerHTML='';
+      catWrap.innerHTML='';
+      await streamNextRound();
+      applyFilter(true);
+    }
+
+    // ---------- Orders page ----------
+    async function renderOrdersPage(){
+      const container = q$('#ordersPageList');
+      container.innerHTML='';
+      const user = auth.currentUser;
+      const role = user ? await getUserRole(user.uid) : 'customer';
+
+      const snap = await getDocs(query(collection(db,'orders'), orderBy('createdAt','desc')));
+      const all=[];
+      snap.forEach(d=> all.push({ id:d.id, ...d.data() }));
+
+      const list = (role==='admin') ? all : all.filter(o => (user && o.userId===user.uid));
+      if(list.length===0){
+        container.innerHTML = '<div class="center muted">কোন অর্ডার নেই</div>';
+        return;
+      }
+      list.forEach(o=>{
+        const el = document.createElement('div');
+        el.className='card'; el.style.marginBottom='8px';
+        const when = o.createdAt?.toDate ? o.createdAt.toDate().toLocaleString() : '';
+        el.innerHTML = `
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <strong>Order #${o.id}</strong>
+              <div class="small muted">${when}</div>
+            </div>
+            <div style="text-align:right">৳ ${o.total}
+              <div class="small">স্ট্যাটাস: ${o.status}</div>
+            </div>
+          </div>`;
+        el.innerHTML += `<div style="margin-top:8px">${
+          Object.values(o.items||{}).map(it=>`<div class="small">${escapeHtml(it.name)} × ${it.qty} — ৳ ${it.price*it.qty}</div>`).join('')
+        }</div>`;
+        container.appendChild(el);
+      });
+    }
+
+    // ---------- Router ----------
+    function setActiveRoute(id){
+      qa$('.route').forEach(r=>r.classList.remove('active'));
+      q$(id).classList.add('active');
+    }
+    async function routeTo(hash){
+      if(!hash || hash==="#/" || hash==="#") {
+        setActiveRoute('#route-home'); await bootHome(); return;
+      }
+      if(hash==="#/cart"){ setActiveRoute('#route-cart'); renderCartPage(); return; }
+      if(hash==="#/checkout"){ setActiveRoute('#route-checkout'); return; }
+      if(hash==="#/login"){ setActiveRoute('#route-login'); showLoginForm('login'); return; }
+      if(hash==="#/orders"){ setActiveRoute('#route-orders'); await renderOrdersPage(); return; }
+      if(hash==="#/admin"){ setActiveRoute('#route-admin'); await openAdmin(); return; }
+      setActiveRoute('#route-home');
+    }
+    window.addEventListener('hashchange', ()=> routeTo(location.hash));
+    routeTo(location.hash||"#/");
+
+    // Helpers
+    window.addEventListener('storage', ()=> { updateNavCart(); });
+    updateNavCart();
+
+    // --- Flash sale timer ---
+    function startFlashSaleTimer(endTime) {
+      function updateTimer() {
+        const now = Date.now();
+        const distance = endTime - now;
+        const hrsEl = document.getElementById('hrs');
+        const minsEl = document.getElementById('mins');
+        const secsEl = document.getElementById('secs');
+        if(!hrsEl || !minsEl || !secsEl) return;
+
+        if (distance <= 0) {
+          hrsEl.textContent = '00'; minsEl.textContent = '00'; secsEl.textContent = '00';
+          return;
+        }
+        const h = Math.floor((distance % (1000*60*60*24))/(1000*60*60));
+        const m = Math.floor((distance % (1000*60*60))/(1000*60));
+        const s = Math.floor((distance % (1000*60))/1000);
+        hrsEl.textContent = String(h).padStart(2,'0');
+        minsEl.textContent = String(m).padStart(2,'0');
+        secsEl.textContent = String(s).padStart(2,'0');
+        setTimeout(updateTimer, 1000);
+      }
+      updateTimer();
+    }
+    startFlashSaleTimer(Date.now() + (6*60*60*1000));
+  </script>
 </body>
 </html>
