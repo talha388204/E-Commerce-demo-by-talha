@@ -1,250 +1,103 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="bn">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Full‑Vibe Smart Board</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css"/>
-  </head>
-  <body>
-    <div id="app">
-      <!-- Left Toolbar -->
-      <aside class="left-toolbar glass" aria-label="Tools">
-        <button class="tool-btn active" data-tool="select" title="Select (V)"><span>↖</span></button>
-        <button class="tool-btn" data-tool="pen" title="Pen (P)"><span>✎</span></button>
-        <button class="tool-btn" data-tool="highlighter" title="Highlighter (H)"><span>🖍</span></button>
-        <button class="tool-btn" data-tool="eraser" title="Eraser (E)"><span>⌫</span></button>
-        <button class="tool-btn" data-tool="text" title="Text (T)"><span>T</span></button>
-        <button class="tool-btn" data-tool="shapes" title="Shapes (S)"><span>⬛</span></button>
-        <button class="tool-btn" data-tool="image" title="Image / Media (I)"><span>🖼</span></button>
-        <button class="tool-btn" data-tool="sticky" title="Sticky Note (N)"><span>🗒</span></button>
-        <button class="tool-btn" data-tool="laser" title="Laser (hold L)"><span>🔴</span></button>
-        <button class="tool-btn" data-tool="hand" title="Hand / Pan (hold Space)"><span>✋</span></button>
-        <button class="tool-btn" data-tool="record" title="Record Session"><span>⏺</span></button>
-        <div class="flex-spacer"></div>
-        <button class="tool-btn" data-action="undo" title="Undo (Ctrl/Cmd+Z)"><span>↶</span></button>
-        <button class="tool-btn" data-action="redo" title="Redo (Ctrl/Cmd+Shift+Z)"><span>↷</span></button>
-
-        <!-- Floating Pen Panel -->
-        <div id="pen-panel" class="float-panel glass hidden" role="dialog" aria-label="Pen settings">
-          <div class="row">
-            <label>Color</label>
-            <div class="palette">
-              <button class="swatch" data-color="#22D3EE" style="--c:#22D3EE"></button>
-              <button class="swatch" data-color="#FF6B6B" style="--c:#FF6B6B"></button>
-              <button class="swatch" data-color="#FDE047" style="--c:#FDE047"></button>
-              <button class="swatch" data-color="#ffffff" style="--c:#ffffff"></button>
-            </div>
-          </div>
-          <div class="row">
-            <label>Size</label>
-            <input id="pen-size" type="range" min="1" max="32" value="4"/>
-            <span id="pen-size-val">4</span>
-          </div>
-          <div class="row">
-            <label>Smoothing</label>
-            <input id="pen-smooth" type="checkbox" checked/>
-          </div>
-          <div class="row">
-            <label>Pressure</label>
-            <input id="pen-pressure" type="checkbox" checked/>
-          </div>
-        </div>
-
-        <!-- Highlighter Panel -->
-        <div id="high-panel" class="float-panel glass hidden" role="dialog" aria-label="Highlighter settings">
-          <div class="row">
-            <label>Color</label>
-            <div class="palette">
-              <button class="swatch" data-color="#FDE047" style="--c:#FDE047"></button>
-              <button class="swatch" data-color="#22D3EE" style="--c:#22D3EE"></button>
-              <button class="swatch" data-color="#FF6B6B" style="--c:#FF6B6B"></button>
-              <button class="swatch" data-color="#A78BFA" style="--c:#A78BFA"></button>
-            </div>
-          </div>
-          <div class="row">
-            <label>Size</label>
-            <input id="high-size" type="range" min="8" max="64" value="20"/>
-            <span id="high-size-val">20</span>
-          </div>
-          <div class="row">
-            <label>Opacity</label>
-            <input id="high-alpha" type="range" min="0.1" max="1" step="0.05" value="0.35"/>
-            <span id="high-alpha-val">0.35</span>
-          </div>
-        </div>
-
-        <!-- Shapes Panel -->
-        <div id="shapes-panel" class="float-panel glass hidden" role="dialog" aria-label="Shapes">
-          <div class="shape-grid">
-            <button class="shape-btn" data-shape="rect" title="Rectangle">▭</button>
-            <button class="shape-btn" data-shape="ellipse" title="Ellipse">◯</button>
-            <button class="shape-btn" data-shape="line" title="Line">／</button>
-            <button class="shape-btn" data-shape="arrow" title="Arrow">➤</button>
-          </div>
-          <div class="row">
-            <label>Stroke</label>
-            <input id="shape-stroke" type="color" value="#22D3EE"/>
-            <label>Fill</label>
-            <input id="shape-fill" type="color" value="#00000000"/>
-          </div>
-          <div class="row">
-            <label>Width</label>
-            <input id="shape-width" type="range" min="1" max="16" value="2"/>
-            <span id="shape-width-val">2</span>
-          </div>
-        </div>
-
-        <!-- Image input -->
-        <input id="image-input" type="file" accept="image/*" class="hidden"/>
-      </aside>
-
-      <!-- Topbar -->
-      <header class="topbar glass">
-        <div class="left">
-          <div class="app-logo">◎</div>
-          <input id="board-title" class="title" value="Algebra — Quadratic Graphs" aria-label="Board title"/>
-        </div>
-        <div class="center page-nav">
-          <button id="page-prev" class="ghost" title="Prev">‹</button>
-          <div id="page-index" class="index">1 / 1</div>
-          <button id="page-next" class="ghost" title="Next">›</button>
-          <button id="page-add" class="ghost" title="Add page">＋</button>
-          <div id="thumb-strip" class="thumb-strip hidden"></div>
-        </div>
-        <div class="right">
-          <button id="share-btn" class="primary glow" title="Share">Share</button>
-          <div class="avatars" aria-label="Presence">
-            <div class="avatar" title="Teacher"><span>👩‍🏫</span><i class="dot"></i></div>
-            <div class="avatar" title="Ayan"><span>🧑</span><i class="dot"></i></div>
-            <div class="avatar" title="Luna"><span>👩</span><i class="dot"></i></div>
-          </div>
-          <button id="profile" class="ghost">⋯</button>
-        </div>
-      </header>
-
-      <!-- Right Sidebar -->
-      <aside class="right-rail collapsed" aria-label="Panels">
-        <div class="tabs">
-          <button class="tab-btn active" data-tab="layers" title="Layers">🧱</button>
-          <button class="tab-btn" data-tab="pages" title="Pages">🗂</button>
-          <button class="tab-btn" data-tab="chat" title="Chat/Polls">💬</button>
-          <button class="tab-btn" data-tab="assets" title="Assets">📚</button>
-          <button class="tab-btn" data-tab="settings" title="Settings">⚙️</button>
-        </div>
-        <div class="panel glass">
-          <section id="tab-layers" class="tab-panel">
-            <div class="panel-title">Layers</div>
-            <ul id="layer-list" class="layer-list"></ul>
-          </section>
-          <section id="tab-pages" class="tab-panel hidden">
-            <div class="panel-title">Pages</div>
-            <div id="pages-carousel" class="pages-carousel"></div>
-            <button id="duplicate-page" class="ghost small">Duplicate</button>
-            <button id="delete-page" class="ghost small danger">Delete</button>
-          </section>
-          <section id="tab-chat" class="tab-panel hidden">
-            <div class="panel-title">Chat & Polls (mock)</div>
-            <div class="hint">Coming soon: realtime chat, raise-hand, polls.</div>
-          </section>
-          <section id="tab-assets" class="tab-panel hidden">
-            <div class="panel-title">Assets</div>
-            <div class="hint">Upload images via Image tool (I) or drag & drop.</div>
-          </section>
-          <section id="tab-settings" class="tab-panel hidden">
-            <div class="panel-title">Settings</div>
-            <label class="row"><input type="checkbox" id="snap-toggle"/> <span>Snap to grid</span></label>
-            <label class="row"><input type="checkbox" id="grid-toggle"/> <span>Show grid</span></label>
-          </section>
-        </div>
-        <button id="rail-toggle" class="rail-toggle" title="Toggle sidebar">‹</button>
-      </aside>
-
-      <!-- Canvas Stage -->
-      <main id="stage-wrap">
-        <div id="canvas-stage" class="stage" tabindex="0" aria-label="Canvas stage">
-          <!-- Grid overlay -->
-          <canvas id="grid-canvas" class="grid-layer"></canvas>
-          <!-- Stroke canvas -->
-          <canvas id="stroke-canvas" class="stroke-layer"></canvas>
-          <!-- SVG object layer -->
-          <svg id="svg-layer" class="svg-layer" xmlns="http://www.w3.org/2000/svg"></svg>
-          <!-- Laser pointer -->
-          <div id="laser-dot" class="laser-dot hidden"></div>
-        </div>
-      </main>
-
-      <!-- Bottom Toolbar -->
-      <footer class="bottombar glass">
-        <div class="left">
-          <button class="ghost" id="undo-bottom" title="Undo">↶</button>
-          <button class="ghost" id="redo-bottom" title="Redo">↷</button>
-          <button class="ghost danger" id="clear-page" title="Clear page">Clear</button>
-        </div>
-        <div class="center">
-          <button class="ghost" id="grid-btn" title="Toggle grid">#</button>
-          <button class="ghost" id="snap-btn" title="Snap to grid">⧉</button>
-          <input id="zoom-range" type="range" min="25" max="300" value="100" />
-          <span id="zoom-label">100%</span>
-          <button class="ghost" id="fit-btn" title="Fit to screen">Fit</button>
-        </div>
-        <div class="right">
-          <div class="dropdown">
-            <button class="primary" id="quick-export">Quick PNG</button>
-            <button class="ghost" id="export-menu">Export ▾</button>
-            <div id="export-dropdown" class="menu glass hidden">
-              <button data-export="png">Export PNG</button>
-              <button data-export="svg">Export SVG</button>
-            </div>
-          </div>
-          <button class="ghost" id="fullscreen-btn" title="Fullscreen">⛶</button>
-          <button class="ghost" id="help-btn" title="Help">?</button>
-        </div>
-      </footer>
-
-      <!-- Share Modal -->
-      <div id="share-modal" class="modal hidden" role="dialog" aria-modal="true">
-        <div class="modal-content glass">
-          <div class="modal-header">
-            <h3>Share & Permissions</h3>
-            <button class="ghost close" data-close="share-modal">×</button>
-          </div>
-          <div class="modal-body">
-            <label class="row"><input type="checkbox" id="make-editable"/> <span>Make editable</span></label>
-            <div class="row">
-              <input id="share-link" type="text" value="https://example.com/board/123" readonly/>
-              <button id="copy-link" class="primary">Copy link</button>
-            </div>
-            <div class="row">
-              <label class="mini">Role</label>
-              <select id="role-select">
-                <option>viewer</option>
-                <option>commenter</option>
-                <option>editor</option>
-              </select>
-            </div>
-            <div class="row">
-              <label class="mini">Passcode</label>
-              <input id="passcode" type="password" placeholder="••••"/>
-            </div>
-            <div class="row">
-              <label class="mini">Expiry</label>
-              <input id="expiry" type="date"/>
-            </div>
-            <div class="row">
-              <label class="mini">Embed</label>
-              <textarea id="embed" rows="2"><iframe src="https://example.com/board/123" allowfullscreen></iframe></textarea>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button class="ghost" data-close="share-modal">Close</button>
-          </div>
-        </div>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SmartBoard — MVP (Glassy Dark)</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#07121A">
+</head>
+<body>
+  <div id="app">
+    <!-- Topbar -->
+    <header class="topbar glass">
+      <div class="left">
+        <img src="icons/icon-192.png" alt="logo" class="logo">
+        <input id="boardTitle" class="board-title" value="Classroom SmartBoard" />
       </div>
-    </div>
+      <div class="center">
+        <button id="prevPage" class="icon">◀</button>
+        <span id="pageIndicator">1 / 1</span>
+        <button id="nextPage" class="icon">▶</button>
+        <button id="addPage" class="icon">+ Page</button>
+      </div>
+      <div class="right">
+        <button id="exportBtn" class="glass-btn">Export PNG</button>
+        <button id="saveLocal" class="glass-btn">Save</button>
+        <button id="loadLocal" class="glass-btn">Load</button>
+        <div class="avatar">🎓</div>
+      </div>
+    </header>
 
-    <script src="app.js"></script>
-  </body>
+    <!-- Main area -->
+    <main class="main">
+      <!-- Left Tools -->
+      <aside class="tools glass" id="tools">
+        <button class="tool active" data-tool="select" title="Select (V)">🖱</button>
+        <button class="tool" data-tool="pen" title="Pen (P)">✏️</button>
+        <button class="tool" data-tool="high" title="Highlighter (H)">🔆</button>
+        <button class="tool" data-tool="eraser" title="Eraser (E)">🧽</button>
+        <button class="tool" data-tool="text" title="Text (T)">🅰️</button>
+        <button class="tool" data-tool="rect" title="Rectangle (R)">▭</button>
+        <button class="tool" data-tool="circle" title="Circle (C)">◯</button>
+        <button class="tool" data-tool="line" title="Line (L)">／</button>
+        <label class="tool file" title="Upload Image">
+          📁
+          <input id="imgInput" type="file" accept="image/*" />
+        </label>
+
+        <div class="spacer"></div>
+
+        <div class="tool-controls">
+          <label>Color
+            <input id="color" type="color" value="#22d3ee" />
+          </label>
+          <label>Size
+            <input id="size" type="range" min="1" max="60" value="4" />
+          </label>
+          <label>Opacity
+            <input id="opacity" type="range" min="0.1" max="1" step="0.05" value="1" />
+          </label>
+        </div>
+
+        <div class="bottom">
+          <button id="undo" class="glass-btn">↶ Undo</button>
+          <button id="redo" class="glass-btn">↷ Redo</button>
+          <button id="clearPage" class="glass-btn">Clear</button>
+          <button id="fitBtn" class="glass-btn">Fit</button>
+        </div>
+      </aside>
+
+      <!-- Canvas wrapper (supports pan/zoom) -->
+      <section class="board-wrap">
+        <div id="canvasContainer" class="canvas-container">
+          <canvas id="boardCanvas"></canvas>
+        </div>
+      </section>
+
+      <!-- Right sidebar -->
+      <aside class="rightbar glass">
+        <h4>Pages</h4>
+        <ul id="pagesList" class="pages-list"></ul>
+
+        <h4>Layers</h4>
+        <ul id="layersList" class="layers-list"></ul>
+
+        <h4>Session</h4>
+        <div class="session-controls">
+          <button id="recordBtn" class="glass-btn">● Record</button>
+          <button id="downloadRecording" class="glass-btn" disabled>Download</button>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="statusbar glass">
+      <div id="status">Ready • Touch / Pen supported</div>
+      <div class="help">Shortcuts: P Pen • H Highlighter • E Eraser • T Text • R Rect • C Circle • L Line • Space Pan</div>
+    </footer>
+  </div>
+
+  <script src="app.js" type="module"></script>
+</body>
 </html>
