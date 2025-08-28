@@ -1,103 +1,73 @@
 <!doctype html>
-<html lang="bn">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SmartBoard — MVP (Glassy Dark)</title>
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="manifest" href="manifest.webmanifest">
-  <meta name="theme-color" content="#07121A">
-</head>
-<body>
-  <div id="app">
-    <!-- Topbar -->
-    <header class="topbar glass">
-      <div class="left">
-        <img src="icons/icon-192.png" alt="logo" class="logo">
-        <input id="boardTitle" class="board-title" value="Classroom SmartBoard" />
-      </div>
-      <div class="center">
-        <button id="prevPage" class="icon">◀</button>
-        <span id="pageIndicator">1 / 1</span>
-        <button id="nextPage" class="icon">▶</button>
-        <button id="addPage" class="icon">+ Page</button>
-      </div>
-      <div class="right">
-        <button id="exportBtn" class="glass-btn">Export PNG</button>
-        <button id="saveLocal" class="glass-btn">Save</button>
-        <button id="loadLocal" class="glass-btn">Load</button>
-        <div class="avatar">🎓</div>
-      </div>
-    </header>
 
-    <!-- Main area -->
-    <main class="main">
-      <!-- Left Tools -->
-      <aside class="tools glass" id="tools">
-        <button class="tool active" data-tool="select" title="Select (V)">🖱</button>
-        <button class="tool" data-tool="pen" title="Pen (P)">✏️</button>
-        <button class="tool" data-tool="high" title="Highlighter (H)">🔆</button>
-        <button class="tool" data-tool="eraser" title="Eraser (E)">🧽</button>
-        <button class="tool" data-tool="text" title="Text (T)">🅰️</button>
-        <button class="tool" data-tool="rect" title="Rectangle (R)">▭</button>
-        <button class="tool" data-tool="circle" title="Circle (C)">◯</button>
-        <button class="tool" data-tool="line" title="Line (L)">／</button>
-        <label class="tool file" title="Upload Image">
-          📁
-          <input id="imgInput" type="file" accept="image/*" />
-        </label>
 
-        <div class="spacer"></div>
+<section class="categories">
+<div class="cat glass" data-cat="all">সবকিছু</div>
+<div class="cat glass" data-cat="grocery">গ্রোসারি</div>
+<div class="cat glass" data-cat="beauty">বিউটি</div>
+<div class="cat glass" data-cat="health">হেলথ</div>
+<div class="cat glass" data-cat="food">ফুড</div>
+</section>
 
-        <div class="tool-controls">
-          <label>Color
-            <input id="color" type="color" value="#22d3ee" />
-          </label>
-          <label>Size
-            <input id="size" type="range" min="1" max="60" value="4" />
-          </label>
-          <label>Opacity
-            <input id="opacity" type="range" min="0.1" max="1" step="0.05" value="1" />
-          </label>
-        </div>
 
-        <div class="bottom">
-          <button id="undo" class="glass-btn">↶ Undo</button>
-          <button id="redo" class="glass-btn">↷ Redo</button>
-          <button id="clearPage" class="glass-btn">Clear</button>
-          <button id="fitBtn" class="glass-btn">Fit</button>
-        </div>
-      </aside>
+<section id="productGrid" class="product-grid">
+<!-- প্রোডাক্ট কার্ডগুলো JS দিয়ে ভরা হবে -->
+</section>
+</main>
 
-      <!-- Canvas wrapper (supports pan/zoom) -->
-      <section class="board-wrap">
-        <div id="canvasContainer" class="canvas-container">
-          <canvas id="boardCanvas"></canvas>
-        </div>
-      </section>
 
-      <!-- Right sidebar -->
-      <aside class="rightbar glass">
-        <h4>Pages</h4>
-        <ul id="pagesList" class="pages-list"></ul>
+<!-- CART MODAL -->
+<div id="cartModal" class="modal">
+<div class="modal-content glass">
+<header class="modal-header">
+<h3>আপনার কার্ট</h3>
+<button id="closeCart" class="icon-btn">✕</button>
+</header>
+<div id="cartItems" class="cart-items"></div>
+<div class="cart-footer">
+<div class="total">Total: ৳ <span id="cartTotal">0</span></div>
+<button id="checkoutBtn" class="btn primary">চেকআউট</button>
+</div>
+</div>
+</div>
 
-        <h4>Layers</h4>
-        <ul id="layersList" class="layers-list"></ul>
 
-        <h4>Session</h4>
-        <div class="session-controls">
-          <button id="recordBtn" class="glass-btn">● Record</button>
-          <button id="downloadRecording" class="glass-btn" disabled>Download</button>
-        </div>
-      </aside>
-    </main>
+<!-- CHECKOUT MODAL -->
+<div id="checkoutModal" class="modal">
+<div class="modal-content glass">
+<header class="modal-header">
+<h3>চেকআউট</h3>
+<button id="closeCheckout" class="icon-btn">✕</button>
+</header>
+<form id="checkoutForm" class="checkout-form">
+<label>নাম<input name="name" required></label>
+<label>ফোন<input name="phone" required></label>
+<label>ঠিকানা<textarea name="address" rows="3" required></textarea></label>
+<div class="form-actions">
+<button type="submit" class="btn primary">অর্ডার কনফার্ম (COD)</button>
+</div>
+</form>
+</div>
+</div>
 
-    <footer class="statusbar glass">
-      <div id="status">Ready • Touch / Pen supported</div>
-      <div class="help">Shortcuts: P Pen • H Highlighter • E Eraser • T Text • R Rect • C Circle • L Line • Space Pan</div>
-    </footer>
-  </div>
 
-  <script src="app.js" type="module"></script>
+<template id="productCardTpl">
+<div class="card product-card glass">
+<img class="prod-img" src="" alt="">
+<div class="prod-info">
+<h4 class="prod-name"></h4>
+<div class="price-row">
+<div class="price">৳ <span class="current"></span></div>
+<div class="old-price">৳ <span class="old"></span></div>
+</div>
+<div class="card-actions">
+<button class="btn addCart">Add</button>
+</div>
+</div>
+</div>
+</template>
+
+
+<script src="app.js"></script>
 </body>
 </html>
